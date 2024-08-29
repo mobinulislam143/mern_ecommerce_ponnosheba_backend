@@ -23,6 +23,7 @@ app.use(cookieParser())
 app.use(
   cors({
     origin: "http://localhost:5173",
+    origin: "https://ponno-sheba.vercel.app/",
   })
 )
 app.use(helmet())
