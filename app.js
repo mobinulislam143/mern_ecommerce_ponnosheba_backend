@@ -20,12 +20,18 @@ const mongoose =require('mongoose');
 
 // Security Middleware Implement
 app.use(cookieParser())
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    origin: "https://ponno-sheba.vercel.app/",
-  })
-)
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//     origin: "https://ponno-sheba.vercel.app/",
+//   })
+// )
+
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://ponno-sheba.vercel.app/'], // Ensure no trailing slashes
+  methods: ['GET', 'POST'], // Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+}));
 app.use(helmet())
 app.use(xss())
 app.use(hpp())
