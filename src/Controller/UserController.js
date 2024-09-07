@@ -157,33 +157,32 @@ exports.logout = async(req,res) =>{
     }
 }
 
-exports.updateImage = async(req,res) =>{
-    try{
-        const userId = req.headers.user_id
-        const result = await cloudinary.uploader.upload(req.file.path)
-        
-        const user = await UserModel.findById(userId)
-
-        
-        if (!user) {
-            return res.status(404).json({ status: "fail", message: "User not found" });
-        }
-
-        user.profileImg = result.secure_url;
-
-        await user.save()
-        if(user.profileImg !== result.secure_url){
-            const previousImageUrl = user.profileImg
-
-            const publicId = previousImageUrl.substring(previousImageUrl.lastIndexOf("/") + 1, previousImageUrl.lastIndexOf('.'))
-
-            await cloudinary.uploader.destroy(publicId)
-        }
-        res.status(200).json({status: "success",  data: "Profile Update Successfully."})
-    }catch(err){
-        res.status(400).json({status:"fail",data:err.toString()})
+exports.updateImage = async (req, res) => {
+    try {
+      const userId = req.headers.user_id;
+      const result = await cloudinary.uploader.upload(req.file.path);
+  
+      const user = await UserModel.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ status: "fail", message: "User not found" });
+      }
+  
+      user.profileImg = result.secure_url;
+      await user.save();
+  
+      if (user.profileImg !== result.secure_url) {
+        const previousImageUrl = user.profileImg;
+        const publicId = previousImageUrl.substring(previousImageUrl.lastIndexOf("/") + 1, previousImageUrl.lastIndexOf('.'));
+        await cloudinary.uploader.destroy(publicId);
+      }
+  
+      res.status(200).json({ status: "success", data: "Profile Updated Successfully." });
+    } catch (err) {
+      res.status(400).json({ status: "fail", data: err.toString() });
     }
-}
+  };
+  
 
 // try{
 //     res.status(200).json({status: "success",  data: result})

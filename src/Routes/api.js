@@ -14,15 +14,19 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/')
+      cb(null, 'uploads/'); // Folder where files will be stored
     },
     filename: function (req, file, cb) {
-        cb(null, file.originalname)
-    }
-});
+      cb(null, Date.now() + '-' + file.originalname); // Naming the file
+    },
+  });
 
-const upload = multer({ storage: storage });
-  //Admin manage
+  const upload = multer({
+    storage: storage,
+    limits: {
+      fileSize: 1024 * 1024 * 5, 
+    },
+  }) 
   router.post('/adminCreateProduct', AdminAuthVerification,  upload.array('images', 6), AdminController.createProduct);
 
   router.get("/admingetAllProduct", AdminController.getAllProduct) 
@@ -59,10 +63,11 @@ router.post("/login", UserController.userLogin)
 router.post("/updateProfile", AuthVerifyMiddleware, UserController.updateProfile) 
 router.get("/getProfile", AuthVerifyMiddleware, UserController.getProfile) 
 router.post("/deleteAccount", AuthVerifyMiddleware, UserController.deleteAccount) 
-router.post("/updateImage", AuthVerifyMiddleware, upload.single('image'), UserController.updateImage) 
+router.post("/updateProfileImage", AuthVerifyMiddleware, upload.single('image'), UserController.updateImage) 
 router.get("/logout", AuthVerifyMiddleware, UserController.logout) 
 
 // User Product Manages
+router.get('/getallProducts',  ProductController.getAllProduct)
 router.post('/createUserProduct', AuthVerifyMiddleware, upload.array('images', 6), ProductController.createProduct)
 router.post('/reportProduct/:productId', AuthVerifyMiddleware, ReportController.ReportProduct)
 //comment product
@@ -73,7 +78,6 @@ router.get('/usersProduct', AuthVerifyMiddleware, ProductController.usersProduct
 router.get('/product-details/:productId',  ProductController.productDetailsById)
 router.post('/deleteUserproduct', AuthVerifyMiddleware, ProductController.deleteUserproduct)
 
-router.get('/getallProducts',  ProductController.getAllProduct)
 
 
 //Favourite product
