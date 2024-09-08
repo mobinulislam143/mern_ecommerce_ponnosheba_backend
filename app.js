@@ -23,9 +23,10 @@ app.use(cookieParser());
 app.use(cors({
   origin: ['http://localhost:5173', 'https://ponno-sheba.vercel.app'], // Allowed origins
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+  allowedHeaders: ['Content-Type', 'Authorization', 'token'], // Allowed headers (include 'token')
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 }));
+
 
 app.options('*', cors()); // Handle preflight requests
 
