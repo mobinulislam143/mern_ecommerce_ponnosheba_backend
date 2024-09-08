@@ -19,30 +19,27 @@ const mongoose = require('mongoose');
 // Security Middleware Implementation
 app.use(cookieParser());
 
+// Correct CORS setup
 app.use(cors({
   origin: ['http://localhost:5173', 'https://ponno-sheba.vercel.app'], // Allowed origins
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 }));
 
 app.options('*', cors()); // Handle preflight requests
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  next();
-});
+// Remove conflicting manual headers. CORS setup above handles everything.
 
-app.use(helmet());
-app.use(xss());
-app.use(hpp());
-app.use(mongoSanitize());
+// Security middlewares
+app.use(helmet()); // Secures HTTP headers
+app.use(xss()); // Prevents XSS attacks
+app.use(hpp()); // Prevents HTTP Parameter Pollution
+app.use(mongoSanitize()); // Prevents NoSQL injection attacks
 
 mongoose.set('strictQuery', false);
 
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // Parses incoming requests with JSON payloads
 
 // Rate Limiting
 const limiter = rateLimit({
@@ -59,12 +56,13 @@ app.get("/test", async (req, res) => {
 const appRouter = require('./src/Routes/api');
 app.use("/api", appRouter);
 
+// Handle 404 errors for unknown routes
 app.use((req, res) => {
   res.status(404).json({ status: "error", message: "Not Found" });
 });
 
 // MongoDB Connection
-let URI = "mongodb+srv://mobinulislam:8NWFTTL3vZqC2W0L@cluster0.mskd8ua.mongodb.net/awave_market";
+const URI = "mongodb+srv://mobinulislam:8NWFTTL3vZqC2W0L@cluster0.mskd8ua.mongodb.net/awave_market";
 
 mongoose.connect(URI, {
   useNewUrlParser: true,
@@ -78,7 +76,7 @@ mongoose.connect(URI, {
   console.log(e);
 });
 
-// Frontend Connection
+// Serve frontend static files from 'client/dist'
 app.use(express.static('client/dist'));
 app.get('*', function(req, res) {
   res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'));
