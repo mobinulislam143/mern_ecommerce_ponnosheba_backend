@@ -19,6 +19,9 @@ const mongoose = require('mongoose');
 // Security Middleware Implementation
 app.use(cookieParser());
 
+// Trust the proxy headers
+app.set('trust proxy', 1); // Trust the first proxy
+
 // Correct CORS setup
 app.use(cors({
   origin: ['http://localhost:5173', 'https://ponno-sheba.vercel.app'], // Allowed origins
@@ -27,10 +30,7 @@ app.use(cors({
   credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 }));
 
-
 app.options('*', cors()); // Handle preflight requests
-
-// Remove conflicting manual headers. CORS setup above handles everything.
 
 // Security middlewares
 app.use(helmet()); // Secures HTTP headers
