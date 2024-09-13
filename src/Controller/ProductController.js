@@ -597,6 +597,18 @@ exports.LocationCategorySearch = async (req, res) => {
     }
 };
 
+exports.userTotalProduct = async(req,res)=>{
+    try{
+        let userid = new ObjectId(req.headers.user_id)
+
+        let result = await ProductModel.find({userID: userid}).count()
+
+        res.status(200).json({status: "success", data: result})
+    }catch(err){
+        res.status(400).json({status:"fail",data:err.toString()})
+    }
+}
+
 
 // exports.AllProduct = async(req,res)=>{
 //     try{

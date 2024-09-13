@@ -68,6 +68,7 @@ router.get("/logout", AuthVerifyMiddleware, UserController.logout)
 
 // User Product Manages
 router.get('/getallProducts',  ProductController.getAllProduct)
+router.get('/userTotalProduct', AuthVerifyMiddleware,  ProductController.userTotalProduct)
 router.post('/createUserProduct', AuthVerifyMiddleware, upload.array('images', 6), ProductController.createProduct)
 router.post('/reportProduct/:productId', AuthVerifyMiddleware, ReportController.ReportProduct)
 //comment product
