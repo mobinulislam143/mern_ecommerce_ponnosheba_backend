@@ -95,9 +95,10 @@ exports.createProduct = async (req, res) => {
             { $push: { productIds: new ObjectId(product._id )} },
             { upsert: true, new: true }
         )
+        console.log(product, productDetails)
         res.status(200).json({ status: "success", data: product });
     } catch (err) {
-        res.status(400).json({ status: "fail", data: "product create failed" });
+        res.status(400).json({ status: "fail", data: err.toString() });
     }
 }
 
