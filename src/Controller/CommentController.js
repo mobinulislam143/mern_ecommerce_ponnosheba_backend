@@ -16,6 +16,17 @@ exports.CommentProduct = async(req,res)=>{
         res.status(400).json({status:"fail",data: err.toString()})
     }
 }
+exports.DeleteCommentProduct = async(req,res)=>{
+    try{
+       const productid = req.params.productId
+       const commentId = req.params.commentId
+        
+        let result = await CommentModel.deleteOne({productID: productid, _id: commentId})
+        res.status(200).json({status: "success", data: result})
+    }catch(err){
+        res.status(400).json({status:"fail",data: err.toString()})
+    }
+}
 
 exports.getCommentByProduct = async(req,res)=>{
     try{
