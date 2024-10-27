@@ -73,7 +73,7 @@ router.post('/createUserProduct', AuthVerifyMiddleware, upload.array('images', 6
 router.post('/reportProduct/:productId', AuthVerifyMiddleware, ReportController.ReportProduct)
 //comment product
 router.post('/commentProduct/:productId', AuthVerifyMiddleware, CommentController.CommentProduct)
-router.post('/deletecommentProduct/:productId/:commentId', AuthVerifyMiddleware, CommentController.CommentProduct)
+router.delete('/deletecommentProduct/:productId/:commentId', AuthVerifyMiddleware, CommentController.DeleteCommentProduct)
 router.get('/getCommentByProduct/:productId', CommentController.getCommentByProduct)
 
 router.get('/usersProduct', AuthVerifyMiddleware, ProductController.usersProduct)
